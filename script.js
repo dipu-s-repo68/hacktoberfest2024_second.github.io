@@ -16,6 +16,10 @@
 
   let zoomLevel = 1;
   let rotation = 0;
+
+  const MAX_ZOOM = 10;
+  const MIN_ZOOM = 1;
+
   
   function createStars() {
     const container = document.querySelector("body");
@@ -42,14 +46,24 @@
     });
     requestAnimationFrame(animatePlanets);
   }
-  
+
   function handleScroll(event) {
     if (event.deltaY > 0) {
-      zoomLevel -= 0.1;
+      // decrease zoom speed as zoomLevel decrease
+      zoomLevel -= zoomLevel / 10;
     } else {
-      zoomLevel += 0.1;
+      // Increase zoom speed as zoomLevel increases making it easier to zoom further
+      zoomLevel += zoomLevel / 10;
     }
-  
+    if (zoomLevel <= MIN_ZOOM) {
+      //avoid de-zooming more than the minZoom value
+        zoomLevel = MIN_ZOOM;
+    }
+    if (zoomLevel >= MAX_ZOOM) {
+      //avoid zooming more than the maxZoom value
+      zoomLevel = MAX_ZOOM;
+    }
+
     document.body.style.transform = `scale(${zoomLevel})`;
   }
   
